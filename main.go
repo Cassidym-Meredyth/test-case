@@ -100,10 +100,17 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Обработка страницы HTTP-check
+func healthcheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("ok"))
+}
+
 // Обработка страниц
 func handleFunc() {
-	http.HandleFunc("/", index)       // Главная страница
-	http.ListenAndServe(":8080", nil) // Порт для локального сервера
+	http.HandleFunc("/", index)                   // Главная страница
+	http.HandleFunc("/healthcheck/", healthcheck) // HTTP-check
+	http.ListenAndServe(":8080", nil)             // Порт для локального сервера
 }
 
 func main() {
