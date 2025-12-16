@@ -13,7 +13,7 @@ import (
 )
 
 // Структура, в которой есть лишь одно поле - Current с тэгом - json:current
-// Current - анаонимная вложенная структура
+// Current - анонимная вложенная структура
 // Ну то есть, структура будет иметь вид такого JSON файла:
 //
 //	{
@@ -72,13 +72,13 @@ func getWeather(city string) (float64, error) {
 
 // Обработка главной страницы
 func index(w http.ResponseWriter, r *http.Request) {
-	// Для отображения текущей погоды использовался бесплатный API - WeatherAPI (https://www.weatherapi.com/docs/)
-	// Для
+	// query параметр. Нужен для получения температуры в необходимом городе
 	city := r.URL.Query().Get("city")
 	if city == "" {
 		city = "Moscow"
 	}
 
+	// Получение температуры с помощью GET-запроса
 	temp, err := getWeather(city)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -107,6 +107,7 @@ func handleFunc() {
 }
 
 func main() {
+	// Проверка файла .env
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
