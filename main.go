@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -29,25 +30,21 @@ type WeatherResponse struct {
 	} `json:"current"`
 }
 
-// Обработка главной страницы
-func index(w http.ResponseWriter, r *http.Request) {
-	// Для отображения текущей погоды использовался бесплатный API - WeatherAPI (https://www.weatherapi.com/docs/)
-	// Для
-	city := r.URL.Query().Get("city")
-	if city == "" {
-		city = "Moscow"
-	}
+// Структура данных, полученных после GET-запроса
+type Data struct {
+	City  string
+	TempC float64
+}
 
+func getWeather(city string) (float64, error) {
 	apiKey := os.Getenv("WEATHER_API_KEY")
 	if apiKey == "" {
-		http.Error(w, "API key is not set", http.StatusInternalServerError)
-		return
+		return 0, fmt.Errorf("API key is not set")
 	}
 
 	u, err := url.Parse("http://api.weatherapi.com/v1/current.json") // URL-ссылка на API
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return 0, err
 	}
 
 	// Составление запроса
@@ -60,34 +57,44 @@ func index(w http.ResponseWriter, r *http.Request) {
 	// Отправка GET Request
 	resp, err := http.Get(u.String())
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return 0, err
 	}
 	defer resp.Body.Close()
 
 	// Декодирование запроса
 	var wr WeatherResponse
 	if err := json.NewDecoder(resp.Body).Decode(&wr); err != nil {
+		return 0, err
+	}
+
+	return wr.Current.TempC, nil
+}
+
+// Обработка главной страницы
+func index(w http.ResponseWriter, r *http.Request) {
+	// Для отображения текущей погоды использовался бесплатный API - WeatherAPI (https://www.weatherapi.com/docs/)
+	// Для
+	city := r.URL.Query().Get("city")
+	if city == "" {
+		city = "Moscow"
+	}
+
+	temp, err := getWeather(city)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
 
 	// Структура для вывода информации о городе и текущей температуре
-	data := struct {
-		City  string
-		TempC float64
-	}{
-		City:  city,
-		TempC: wr.Current.TempC,
-	}
+	data := Data{City: city, TempC: temp}
 
-	//
+	// Загрузка и проверка HTML-шаблона
 	t, err := template.ParseFiles("index.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Объединение самого HTML-шаблона с данными, полученными после GET-запроса
 	if err := t.ExecuteTemplate(w, "index", data); err != nil {
 		log.Println("template execute: ", err)
 	}
