@@ -60,7 +60,9 @@ type Data struct {
 
 func getWeather(city string) (float64, error) {
 	start := time.Now()
-	defer weatherDuration.Observe(float64(time.Since(start).Seconds()))
+	defer func() {
+		weatherDuration.Observe(float64(time.Since(start).Seconds()))
+	}()
 
 	apiKey := os.Getenv("WEATHER_API_KEY")
 	if apiKey == "" {
