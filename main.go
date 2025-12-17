@@ -125,7 +125,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	data := Data{City: city, TempC: temp}
 
 	// Загрузка и проверка HTML-шаблона
-	t, err := template.ParseFiles("index.html")
+	t, err := template.ParseFiles("./html/index.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -149,7 +149,7 @@ func handleFunc() {
 	http.HandleFunc("/healthcheck/", healthcheck) // HTTP-check
 	http.Handle("/metrics", promhttp.Handler())   // metrics page
 
-	fs := http.FileServer(http.Dir("./style")) // Подключение стилей для страницы
+	fs := http.FileServer(http.Dir("./html/style")) // Подключение стилей для страницы
 	http.Handle("/style/", http.StripPrefix("/style/", fs))
 
 	http.ListenAndServe(":8080", nil) // Порт для локального сервера
