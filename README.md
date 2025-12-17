@@ -8,7 +8,7 @@
 
 - HTTP-сервер на Go (`net/http`, `html/template`)
 - Получение текущей температуры из [WeatherAPI](https://www.weatherapi.com/my/)
-- Передача города через query-параметр `?city=` (По умолчаниюЖ `Moscow`)
+- Передача города через query-параметр `?city=` (По умолчанию - `Moscow`)
 - Эндпоинт для проверки доступности (HTTP-check): `/healthcheck`
 - Эндпоинт метрик Prometheus: `/metrics`
     - счетчик HTTP-запросов к главной странице - параметр `reqTotal`
