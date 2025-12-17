@@ -148,7 +148,11 @@ func handleFunc() {
 	http.HandleFunc("/", index)                   // Главная страница
 	http.HandleFunc("/healthcheck/", healthcheck) // HTTP-check
 	http.Handle("/metrics", promhttp.Handler())   // metrics page
-	http.ListenAndServe(":8080", nil)             // Порт для локального сервера
+
+	fs := http.FileServer(http.Dir("./style")) // Подключение стилей для страницы
+	http.Handle("/style/", http.StripPrefix("/style/", fs))
+
+	http.ListenAndServe(":8080", nil) // Порт для локального сервера
 }
 
 func main() {
