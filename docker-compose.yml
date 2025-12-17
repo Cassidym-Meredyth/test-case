@@ -1,0 +1,30 @@
+services:
+  app:
+    image: weather-app:0.4
+    env_file: .env
+    ports:
+      - "80:8080"
+    networks:
+      test_case-net:
+        ipv4_address: 172.20.0.10
+
+  prometheus:
+    image: prom/prometheus:main
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      test_case-net:
+        ipv4_address: 172.20.0.11
+
+volumes:
+  prometheus_data:
+
+networks:
+  test_case-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
