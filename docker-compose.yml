@@ -1,0 +1,6 @@
+services:
+  app:
+    image: weather-app:0.4
+    env_file: .env
+    ports:
+      - "80:8080"
