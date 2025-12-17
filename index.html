@@ -4,11 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <h1>Current temperature</h1>
-    <p>City: {{.City}}</p>
-    <p>Temperature: {{.TempC}} &deg;C</p>
+<div class="page">
+    <div class="card">
+        <h1 class="card-title">Current temperature</h1>
+
+        <table class="weather-table">
+            <thead>
+            <tr>
+                <th>City</th>
+                <th>Temperature</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{.City}}</td>
+                <td>{{.TempC}} &deg;C</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
 {{end}}
