@@ -24,7 +24,7 @@ body {
     padding: 24px 28px;
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
     max-width: 380px;
-    width: 100%;
+    width: 150%;
 }
 
 .card-title {
@@ -34,13 +34,48 @@ body {
     color: #0f172a;
 }
 
+.city-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
+
+.city-form label {
+    font-size: 21px;
+}
+
+.city-form input {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #cbd5f5;
+    font-size: 21px;
+}
+
+.city-form button {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #2563eb;
+    color: #fff;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.city-form button:hover {
+    background-color: #1d4ed8;
+}
+
 /* Таблица */
 
 .weather-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
-    font-size: 14px;
+    font-size: 21px;
 }
 
 .weather-table thead {
